@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>台灣遊蕩犬分析 - 石啟宏</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        #map { height: 500px; width: 100%; background: #eee; }
+        body { font-family: sans-serif; padding: 20px; }
+        .info { padding: 10px; background: #fff3cd; border: 1px solid #ffeeba; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <h1>台灣遊蕩犬分析</h1>
+    <p>作者：石啟宏</p>
+    <div id="map">地圖載入中...（若長時間未顯示，請檢查網路連線）</div>
+    
+    <div class="info">
+        <strong>數據摘要：</strong> 113 年全國遊蕩犬估計總數為 141,584 隻。
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        try {
+            const map = L.map('map').setView([23.6, 121.0], 7);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+            // 來源數據：113年各縣市遊蕩犬估計數 [1, 2]
+            const data = [
+                {n: "臺南市", c: 19990, lat: 22.99, lng: 120.21},
+                {n: "嘉義縣", c: 16944, lat: 23.45, lng: 120.25},
+                {n: "高雄市", c: 10200, lat: 22.62, lng: 120.31},
+                {n: "屏東縣", c: 10024, lat: 22.67, lng: 120.48},
+                {n: "新北市", c: 9982, lat: 25.01, lng: 121.46},
+                {n: "南投縣", c: 9644, lat: 23.91, lng: 120.68},
+                {n: "彰化縣", c: 9313, lat: 24.05, lng: 120.51},
+                {n: "連江縣", c: 26, lat: 26.15, lng: 119.93}
+            ];
+
+            data.forEach(item => {
+                L.circleMarker([item.lat, item.lng], {
+                    radius: 10,
+                    color: item.c > 10000 ? 'red' : 'orange',
+                    fillOpacity: 0.7
+                }).addTo(map).bindPopup(`${item.n}: ${item.c} 隻`);
+            });
+        } catch (e) {
+            document.getElementById('map').innerHTML = "程式執行錯誤: " + e.message;
+        }
+    </script>
+</body>
+</html>
